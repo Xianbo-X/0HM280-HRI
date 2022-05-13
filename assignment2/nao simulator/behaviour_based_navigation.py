@@ -9,10 +9,10 @@ def FTarget(target_distance, target_angle):
     #do something useful here
     Ftar=0
 
-    if target_angle > 0:
-        Ftar += target_distance * 0.1 #target on the left, increase turn rate
-    elif target_angle < 0:
-        Ftar -= target_distance * 0.1 # target on the right, decrease turn rate
+    # if target_angle > 0:
+    #     Ftar += target_distance * 0.1 #target on the left, increase turn rate
+    # elif target_angle < 0:
+    #     Ftar -= target_distance * 0.1 # target on the right, decrease turn rate
 
     return Ftar
 
@@ -70,6 +70,12 @@ def compute_turnrate(target_dist, target_angle, sonar_distance_left, sonar_dista
              Fobs_right + \
              FOrienting() + \
              FStochastic()
+    
+    # Challenge 2:
+    if sonar_distance_left < sonar_distance_right:
+        FTotal += abs(sonar_distance_left - sonar_distance_right) #target on the left, increase turn rate
+    else:
+        FTotal -= abs(sonar_distance_left - sonar_distance_right) #target on the left, increase turn rate
              
     # turnrate: d phi(t) / dt = sum( forces ) 
     turnrate =  FTotal*delta_t
