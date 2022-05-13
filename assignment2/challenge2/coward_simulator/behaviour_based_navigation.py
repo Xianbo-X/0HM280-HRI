@@ -56,8 +56,6 @@ def compute_velocity(sonar_distance_left, sonar_distance_right):
     return velocity
 
 def compute_turnrate(target_dist, target_angle, sonar_distance_left, sonar_distance_right):
-
-    return sonar_distance_right-sonar_distance_left
     max_turnrate = 0.349 #rad/s # may need adjustment!
 
     delta_t = 1 # may need adjustment!
