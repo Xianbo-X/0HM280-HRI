@@ -27,7 +27,7 @@ def compute_sensor_distange(robot,alltargets):
     pos=sensor_position(robot)
     target=alltargets.sprites()[0]
     left=np.linalg.norm(pos[0]-np.array([target.x,target.y]),2)
-    right=np.linalg.norm(pos[0]-np.array([target.x,target.y]),2)
+    right=np.linalg.norm(pos[1]-np.array([target.x,target.y]),2)
     return left,right
     
 
