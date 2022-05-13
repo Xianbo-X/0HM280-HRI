@@ -18,5 +18,5 @@ MAGENTA = (255, 0, 255)
 CYAN = (0, 255, 255)
 WHITE = (255, 255, 255)
 
-screen_width = 1920
-screen_height = 1080
+screen_width = 1024
+screen_height = 768
