@@ -16,9 +16,25 @@ def compute_target_location(robot, alltargets):
     i = np.argmin(dist)
     return dist[i], angle[i]
 
+def sensor_position(robot):
+    pos=[]
+    for sensor in len(robot.sensor_positions):
+        pos.append(np.array([robot.x + robot.sensor_positions[sensor][0] * math.cos(robot.sensor_positions[sensor][1] + robot.phi),
+        robot.y + robot.sensor_positions[sensor][0] * math.sin(robot.sensor_positions[sensor][1] + robot.phi)]))
+    return pos
+
+def compute_sensor_distange(robot,alltargets):
+    pos=sensor_position(robot)
+    target=alltargets[0]
+    left=np.linalg.norm(pos[0]-np.array([target.x,target.y]),2)
+    right=np.linalg.norm(pos[0]-np.array([target.x,target.y]),2)
+    return left,right
+    
+
 
 def scan_world(robot, allobstacles, alltargets):
-    [sonar_left, sonar_right] = robot.sonar(allobstacles)
+    # [sonar_left, sonar_right] = robot.sonar(allobstacles)
+    [sonar_left, sonar_right] = compute_sensor_distange(robot,alltargets)
     target_distance, target_angle = compute_target_location(robot, alltargets)  # The angle is with respect to the world frame
     # print sonar_left, sonar_right, target_distance, target_angle
     target_angle_robot = target_angle - robot.phi  # This is the angle relative to the heading direction of the robot.
