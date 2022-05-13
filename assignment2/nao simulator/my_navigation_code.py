@@ -23,18 +23,35 @@ def sensor_position(robot):
         robot.y + robot.sensor_positions[sensor][0] * math.sin(robot.sensor_positions[sensor][1] + robot.phi)]))
     return pos
 
-def compute_sensor_distange(robot,alltargets):
+def compute_sensor_distange(robot,alltargets,max_detect_distance=None):
+    """
+    Parameters:
+    ------------
+    robot: (object) robot,
+    alltargets: (object) alltargets,
+    max_detect_distance: (int>=0|None|-1) 
+        None: use robote.max_detection
+        -1  : No max detect distance limits, np.inf
+        int : max detect distance is the non-negative number
+
+    returns:
+    -----------
+    left,right: left detected distance, right detected distance
+    """
+
+    if max_detect_distance is None: max_detect_distance=robot.max_distance
+    if max_detect_distance is -1: max_detect_distance=np.inf
     pos=sensor_position(robot)
     target=alltargets.sprites()[0]
-    left=np.linalg.norm(pos[0]-np.array([target.x,target.y]),2)
-    right=np.linalg.norm(pos[0]-np.array([target.x,target.y]),2)
+    left=min(np.linalg.norm(pos[0]-np.array([target.x,target.y]),2),max_detect_distance)
+    right=min(np.linalg.norm(pos[1]-np.array([target.x,target.y]),2),max_detect_distance)
     return left,right
     
 
 
 def scan_world(robot, allobstacles, alltargets):
     # [sonar_left, sonar_right] = robot.sonar(allobstacles)
-    [sonar_left, sonar_right] = compute_sensor_distange(robot,alltargets)
+    [sonar_left, sonar_right] = compute_sensor_distange(robot,alltargets,None)
     target_distance, target_angle = compute_target_location(robot, alltargets)  # The angle is with respect to the world frame
     # print sonar_left, sonar_right, target_distance, target_angle
     target_angle_robot = target_angle - robot.phi  # This is the angle relative to the heading direction of the robot.
