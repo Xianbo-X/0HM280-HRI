@@ -18,14 +18,14 @@ def compute_target_location(robot, alltargets):
 
 def sensor_position(robot):
     pos=[]
-    for sensor in len(robot.sensor_positions):
+    for sensor in range(len(robot.sensor_positions)):
         pos.append(np.array([robot.x + robot.sensor_positions[sensor][0] * math.cos(robot.sensor_positions[sensor][1] + robot.phi),
         robot.y + robot.sensor_positions[sensor][0] * math.sin(robot.sensor_positions[sensor][1] + robot.phi)]))
     return pos
 
 def compute_sensor_distange(robot,alltargets):
     pos=sensor_position(robot)
-    target=alltargets[0]
+    target=alltargets.sprites()[0]
     left=np.linalg.norm(pos[0]-np.array([target.x,target.y]),2)
     right=np.linalg.norm(pos[0]-np.array([target.x,target.y]),2)
     return left,right
