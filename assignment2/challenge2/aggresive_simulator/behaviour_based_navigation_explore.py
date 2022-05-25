@@ -42,8 +42,8 @@ def FOrienting():
     Forient=0
     return Forient
 
-def positive_power(sonar_distance,max_velocity,max_distance,min_distance):
-    vel=(50/sonar_distance)/(max_distance-min_distance)*max_velocity*10
+def negative_power(sonar_distance,max_velocity,max_distance,min_distance):
+    vel=sonar_distance/(max_distance-min_distance)*max_velocity
     # vel=sonar_distance
     if sonar_distance>max_distance: vel = max_velocity
     # pr=np.random.uniform(0,1)
@@ -57,8 +57,8 @@ def compute_velocity(sonar_distance_left, sonar_distance_right):
     max_distance = MAX_DISTANCE #m
     # min_distance = 0.2 #m
     min_distance = MIN_DISTANCE #m
-    right_velocity=positive_power(sonar_distance_left,max_velocity,max_distance,min_distance)
-    left_velocity=positive_power(sonar_distance_right,max_velocity,max_distance,min_distance)
+    left_velocity=negative_power(sonar_distance_left,max_velocity,max_distance,min_distance)
+    right_velocity=negative_power(sonar_distance_right,max_velocity,max_distance,min_distance)
     
     return (left_velocity+right_velocity)/2
 
@@ -70,8 +70,8 @@ def compute_turnrate(target_dist, target_angle, sonar_distance_left, sonar_dista
     max_distance = MAX_DISTANCE #m
     min_distance = MIN_DISTANCE #m
 
-    right_velocity=positive_power(sonar_distance_left,max_velocity,max_distance,min_distance)
-    left_velocity=positive_power(sonar_distance_right,max_velocity,max_distance,min_distance)
+    right_velocity=negative_power(sonar_distance_left,max_velocity,max_distance,min_distance)
+    left_velocity=negative_power(sonar_distance_right,max_velocity,max_distance,min_distance)
     
     return (right_velocity-left_velocity)/WHEEL_LENGTH
 

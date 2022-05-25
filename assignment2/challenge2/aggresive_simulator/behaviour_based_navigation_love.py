@@ -46,9 +46,9 @@ def negative_power(sonar_distance,max_velocity,max_distance,min_distance):
     vel=sonar_distance/(max_distance-min_distance)*max_velocity
     # vel=sonar_distance
     if sonar_distance>max_distance: vel = max_velocity
-    pr=np.random.uniform(0,1)
-    if pr<0.1:
-        vel+=np.random.randn()*max_velocity/100
+    # pr=np.random.uniform(0,1)
+    # if pr<0.1:
+    #     vel+=np.random.randn()*max_velocity/100
     if sonar_distance<min_distance: vel = 0.0
     return vel
 
