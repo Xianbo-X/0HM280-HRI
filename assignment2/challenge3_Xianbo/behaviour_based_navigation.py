@@ -6,7 +6,6 @@ degree = math.pi/180.0 # radians per degree
 def FTarget(target_distance, target_angle):
 
     #do something useful here
-    Ftar=0
     Ftar=-math.sin(-target_angle)#*math.exp(-target_distance)
     print ("Ftar", Ftar)
     return Ftar
@@ -14,11 +13,10 @@ def FTarget(target_distance, target_angle):
 def FObstacle(obs_distance, obs_angle):
     # too_far=10 #cm
     too_far=5 #cm
-    sigma_obs=100 #cm?
-    beta_2=100 #?
+    sigma_obs=100 #cm, large sigma_obs make forces due to angle large
+    beta_2=100 # large beta_2 makes the obstacle force is large
     if obs_distance < too_far:
         #do something useful here
-        Fobs=0 # needs replacing !
         Fobs=math.exp(-(obs_angle)**2/(2*sigma_obs*sigma_obs))*(-obs_angle)*math.exp(-obs_distance/beta_2)
     else:
         Fobs=0
@@ -32,7 +30,7 @@ def FStochastic():
 
 def FOrienting():
     #do something useful here
-    Forient=0
+    Forient=0 # In our case, out objcet don't have a orientation. So, we don't add forces here.
     return Forient
 
 
@@ -53,6 +51,7 @@ def compute_velocity(sonar_distance_left, sonar_distance_right):
     # else:
         # velocity=max_velocity*(sonar_distance_left+sonar_distance_right)/2
     velocity=math.tanh(0.03*((sonar_distance_left+sonar_distance_right)/2-(max_distance+min_distance)/2))+1
+    # hand-designed velocity function to make the speed changes with the distance of obstacles.
 
     
     return velocity
@@ -67,7 +66,7 @@ def compute_turnrate(target_dist, target_angle, sonar_distance_left, sonar_dista
     beta_1=20
     Fobs_left =beta_1*(sonar_distance_left/(sonar_distance_left+sonar_distance_right))*FObstacle(sonar_distance_left, sonar_angle_left)
     Fobs_right =beta_1*(sonar_distance_right/(sonar_distance_left+sonar_distance_right))* FObstacle(sonar_distance_right, sonar_angle_right)
-    
+    # Weighted left force and right force based on the corresponding obstacle distance. It can help our robot avoid obstacles.
     print("Fobs_left",Fobs_left)
     print("Fobs_right",Fobs_right)
     FTotal = 0.5*FTarget(target_dist, target_angle) + \
