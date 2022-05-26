@@ -70,8 +70,8 @@ def compute_turnrate(target_dist, target_angle, sonar_distance_left, sonar_dista
     max_distance = MAX_DISTANCE #m
     min_distance = MIN_DISTANCE #m
 
-    right_velocity=positive_power(sonar_distance_left,max_velocity,max_distance,min_distance)
-    left_velocity=positive_power(sonar_distance_right,max_velocity,max_distance,min_distance)
+    left_velocity=positive_power(sonar_distance_left,max_velocity,max_distance,min_distance)
+    right_velocity=positive_power(sonar_distance_right,max_velocity,max_distance,min_distance)
     
     return (right_velocity-left_velocity)/WHEEL_LENGTH
 
