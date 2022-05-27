@@ -1,4 +1,5 @@
 import math
+from time import sleep
 import numpy as np
 import behaviour_based_navigation as bn
 from definitions import *
@@ -23,7 +24,12 @@ def scan_world(robot, allobstacles, alltargets):
     # print sonar_left, sonar_right, target_distance, target_angle
     target_angle_robot = target_angle - robot.phi  # This is the angle relative to the heading direction of the robot.
 
+    print("sonar left",sonar_left)
+    print("sonar right",sonar_right)
     turn_rate = bn.compute_turnrate(target_distance, target_angle_robot, sonar_left, sonar_right)
     velocity = bn.compute_velocity(sonar_left, sonar_right)
+    print("turnrate: ",turn_rate)
+    print("velocity: ",velocity)
+    # sleep(1)
     robot.set_vel(velocity, turn_rate) # the simulated robot does not sidestep
 
