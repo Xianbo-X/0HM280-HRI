@@ -1,6 +1,6 @@
 import numpy as np
 
-def prediction(mu:np.matrix,sigma:np.matrix,u,A:np.matrix,B:np.matrix,R:np.matrix):
+def prediction(mu,sigma,u,A,B,R):
     """
     Prediction part of the kalman filter
     Params:
@@ -19,7 +19,7 @@ def prediction(mu:np.matrix,sigma:np.matrix,u,A:np.matrix,B:np.matrix,R:np.matri
     return mu_,sigma_
 
 
-def update(mu_:np.matrix,sigma_:np.matrix,z:np.matrix,C:np.matrix,Q:np.matrix):
+def update(mu_,sigma_,z,C,Q):
     """
     Correction part of the kalman filter
     
@@ -40,7 +40,7 @@ def update(mu_:np.matrix,sigma_:np.matrix,z:np.matrix,C:np.matrix,Q:np.matrix):
     sigma=(np.matrix(np.identity(sigma_.shape[0]))-K*C)*sigma_
     return mu, sigma
 
-def kalmanfilter(mu:np.matrix,sigma:np.matrix,u,z:np.matrix,A:np.matrix,B:np.matrix,C:np.matrix,R:np.matrix,Q:np.matrix):
+def kalmanfilter(mu,sigma,u,z,A,B,C,R,Q):
     """
     Kalman filter
 
