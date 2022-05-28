@@ -15,8 +15,8 @@ def FTarget(target_distance, target_angle):
 def FObstacle(obs_distance, obs_angle):
     # too_far=10 #cm
     too_far=5 #cm
-    sigma_obs=100 #cm?
-    beta_2=100 #?
+    sigma_obs=100 #cm? large sigma_obs make forces due to angle large
+    beta_2=100 #? large beta_2 makes the obstacle force is large
     if obs_distance < too_far:
         #do something useful here
         Fobs=math.exp(-(obs_angle)**2/(2*sigma_obs*sigma_obs))*(-obs_angle)*math.exp(-obs_distance/beta_2)
@@ -32,7 +32,7 @@ def FStochastic():
 
 def FOrienting():
     #do something useful here
-    Forient=0
+    Forient=0 # In our case, out objcet don't have a orientation. So, we don't add forces here.
     return Forient
 
 def compute_velocity(sonar_distance_left, sonar_distance_right):
