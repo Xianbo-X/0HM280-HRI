@@ -29,7 +29,7 @@ def scan_world(robot, allobstacles, alltargets):
     [sonar_left, sonar_right] = robot.sonar(allobstacles)
     all_sonars_original.append(np.matrix([[sonar_left,sonar_right]]).T)
     if len(mu_s)==0: mu_s.append(np.matrix([[sonar_left,sonar_right]]).T)
-    mu,sigma=kalmanfilter(mu_s[-1],sigma_s[-1],bn.compute_velocity(mu_s[-1][0,0],mu_s[-1][1,0]),np.matrix([[sonar_left,sonar_right]]).T,A,B,C,R,Q)
+    mu,sigma=kalmanfilter(mu_s[-1],sigma_s[-1],bn.compute_velocity(mu_s[-1][0,0],mu_s[-1][1,0]),np.matrix([[sonar_left,sonar_right]]).T,A,B,C,R,Q) # Apply the kalman filter
     mu_s.append(mu)
     sigma_s.append(sigma)
     sonar_left=mu_s[-1][0,0]
