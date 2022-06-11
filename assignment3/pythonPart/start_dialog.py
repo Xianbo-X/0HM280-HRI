@@ -16,26 +16,29 @@ def start_dialog_on_multitopics(robot_ip, robot_port, topf_path, threshold=0.4):
         topf_path[i] = topf_path[i].decode('utf-8')
         topic.append(dialog_p.loadTopic(topf_path[i].encode('utf-8')))
 
-    # Start dialog
-    dialog_p.subscribe('myModule')
+    try:
+        # Start dialog
+        dialog_p.subscribe('myModule')
 
-    # Activate dialog
-    for i in range(num_topic):
-        dialog_p.activateTopic(topic[i])
-    
-    # dialog_p.setFocus()
+        # Activate dialog
+        for i in range(num_topic):
+            dialog_p.activateTopic(topic[i])
+        
+        # dialog_p.setFocus()
 
-    raw_input(u"Press 'Enter' to exit.")
+        raw_input(u"Press 'Enter' to exit.")
+    except Exception,e:
+        print "Exception happened:",e
+    finally:
+        for i in range(num_topic):
+            # Deactivate topic
+            dialog_p.deactivateTopic(topic[i])
 
-    for i in range(num_topic):
-        # Deactivate topic
-        dialog_p.deactivateTopic(topic[i])
+            # Unload topic
+            dialog_p.unloadTopic(topic[i])
 
-        # Unload topic
-        dialog_p.unloadTopic(topic[i])
-
-    # Stop dialog
-    dialog_p.unsubscribe('myModule')
+        # Stop dialog
+        dialog_p.unsubscribe('myModule')
 
 if __name__ == '__main__':
     dialog_topic = []
