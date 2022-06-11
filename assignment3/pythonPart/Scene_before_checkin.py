@@ -16,7 +16,7 @@ def meet_customer(nao):
 
 
 def control_flow(nao):
-    meet_customer
+    meet_customer(nao)
 
 if __name__=="__main__":
     nao.InitProxy(ROBOT_IP)
