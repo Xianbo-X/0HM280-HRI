@@ -15,7 +15,7 @@ def start_dialog_on_multitopics(robot_ip, robot_port, topf_path, threshold=0.4):
     # Load topic - absolute path is required
     for i in range(num_topic):
         topf_path[i] = topf_path[i].decode('utf-8')
-        topic.append(dialog_p.loadTopic(topf_path[i].encode('utf-8')))
+        topic.append(dialog_p.loadTopic(topf_path[i].encode('utf-8'))) # load all topics
 
     try:
         # Start dialog
@@ -23,7 +23,7 @@ def start_dialog_on_multitopics(robot_ip, robot_port, topf_path, threshold=0.4):
 
         # Activate dialog
         for i in range(num_topic):
-            dialog_p.activateTopic(topic[i])
+            dialog_p.activateTopic(topic[i]) # activate all topics
         
         # dialog_p.setFocus()
 

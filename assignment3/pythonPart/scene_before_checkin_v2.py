@@ -83,7 +83,7 @@ def checkin_out():
 
 def control_flow():
     initNao()
-    active()
+    processing(active) # procee active the NAO robot.
     service_times=0
     while service_times<MAX_SERVICE_TIMES:
         service_times+=1
