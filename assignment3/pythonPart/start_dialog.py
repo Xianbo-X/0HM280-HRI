@@ -4,7 +4,7 @@
 from naoqi import ALProxy
 
 
-def main(robot_ip, robot_port, topf_path, threshold=0.4):
+def start_dialog_on_multitopics(robot_ip, robot_port, topf_path, threshold=0.4):
     dialog_p = ALProxy('ALDialog', robot_ip, robot_port)
     dialog_p.setLanguage("English")
     dialog_p.setASRConfidenceThreshold(threshold)
@@ -51,4 +51,4 @@ if __name__ == '__main__':
     # robot_ip="192.168.0.119"
     port=9559 # Robot port number
 
-    main(robot_ip, port, dialog_topic)
+    start_dialog_on_multitopics(robot_ip, port, dialog_topic)
