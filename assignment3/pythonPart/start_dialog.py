@@ -1,6 +1,7 @@
 #Simple dialog in Python
 # -*- encoding: UTF-8 -*-
 
+from requests import Response
 from naoqi import ALProxy
 
 
@@ -39,6 +40,8 @@ def start_dialog_on_multitopics(robot_ip, robot_port, topf_path, threshold=0.4):
 
         # Stop dialog
         dialog_p.unsubscribe('myModule')
+    Response="YES" #TODO: Change to get a response from dialog
+    return Response
 
 if __name__ == '__main__':
     dialog_topic = []
