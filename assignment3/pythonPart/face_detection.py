@@ -42,6 +42,10 @@ def onFindFace(nao):
     """
     nao.Say("Hi, there. Whilecome to the nice hotel.")
     nao.Say("What can I help you?")
+    try:
+        nao.ALTrack(True)
+    except Exception,e:
+        print "Unable to track Faces, problem is ",e
 
     
     
