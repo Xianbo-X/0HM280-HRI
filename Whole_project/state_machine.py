@@ -75,7 +75,8 @@ class Greeting(StateMachine):
         except Exception,e:
             logging.error("State_2(GreetingMode): Error: %s"%e)
             if DEBUG:
-                selection="Yes" #TODO: Changed in the development version
+                # selection="Yes" #TODO: Changed in the development version
+                selection=input("Please choose weather get a service") #TODO: Changed in the development version
             else:
                 selection="NoResponse"
         return selection
@@ -126,7 +127,7 @@ class Service_Selection(StateMachine):
                 # try to get customer's selection again
                 while cnt<self.retry and answer == "NoResult":
                     cnt += 1
-                    nao.Say("Sorry, I can't understand what did you say, could you repeat your selection again?")
+                    nao.Say("Sorry, I can't understand what you said, could you repeat your selection again?")
                     answer = speech_recog(self.wordlist)
                 else:
                     self.nextphase = 8
@@ -162,7 +163,7 @@ class CheckIn(StateMachine):
                 # try to get customer's selection again
                 while cnt<self.retry and answer == "NoResult" and not self.wordlist.index(answer) == 0:
                     cnt += 1
-                    nao.Say("Sorry, I can't understand what did you say, could you repeat your selection again?")
+                    nao.Say("Sorry, I can't understand what you said, could you repeat your selection again?")
                     answer = speech_recog(self.wordlist)
                 else:
                     self.nextphase = 8
@@ -221,13 +222,16 @@ class OtherService(StateMachine):
         pass
     def exit(self, *args, **kwargs):
         # return state
-        pass
+        self.nextphase = 1
+        return {"next":self.nextphase}
     def run(self,state_dict,**kwargs):
-        return {"next":0}
+        self.enter()
+        return self.exit()
 
 class Guide(StateMachine):
     def __init__(self,ROBOT_IP,ROBOT_PORT,nao):
         self.nextphase = 0
+        self.wordlist = ["yes", "no"]
 
     def enter(self, *args, **kwargs):
         nao.Say("Please follow me!")
@@ -241,10 +245,12 @@ class Guide(StateMachine):
                 # try to get customer's selection again
                 while cnt<self.retry and answer == "NoResult":
                     cnt += 1
+                    nao.Say("Sorry, I can't understand what you said, could you repeat your selection again?")
                     answer = speech_recog(self.wordlist)
-            if self.wordlist.index(answer) == 1:
-                self.nextphase = 6
-            elif self.wordlist.index(answer) == 2:
+            if answer=="yes":
+                self.nextphase = 3
+            elif answer=="no":
+                nao.Say("Have a nice day!")
                 self.nextphase = 1
         except Exception,e:
             logging.error("State(Guide): Error: %s"%e)
@@ -280,24 +286,29 @@ class Unexpected(StateMachine):
                     # try to get customer's selection again
                     while cnt<self.retry and answer == "NoResult":
                         cnt += 1
+                        nao.Say("Sorry, I can't understand what you said, could you repeat your selection again?")
                         answer = speech_recog(self.wordlist)
-                if self.wordlist.index(answer) == 1:
-                    self.nextphase = 6
-                elif self.wordlist.index(answer) == 2:
+                if answer=="yes":
+                    self.nextphase = 3
+                elif answer=="no":
+                    nao.Say("Have a nice day!")
                     self.nextphase = 1
+                return
             except Exception,e:
                 logging.error("State(Guide): Error: %s"%e)
                 if DEBUG:
                     nao.Say("Please wait...Thank you! The Check in process is done, enjoy your room!")
                     nao.Say("Still need other service?")
-                    self.nextphase = 6
+                    self.nextphase = 3
                     return "Yes" #TODO: Changed in the development version
                 else:
-                    self.nextphase = 8
+                    self.nextphase = 1
                     return "NoResponse"
 
         if self.enterinfo == "LowBattery":
             nao.Say("Sorry dear coustomer, I need charge now.")
+            self.nextphase = 0
+            return
 
     def exit(self, *args, **kwargs):
         # return state
