@@ -1,7 +1,12 @@
 import nao_nocv_2_1 as nao
 import time
+DEBUG=True
 
 def speech_recog(wordList,maxcount=50,subscriber_name="MyModule"):
+    if DEBUG:
+        result=raw_input("Enter the word from: "+str(wordList))
+        print "Get results", result
+        return result
     the_language="English"
     result=None
     nao.InitSpeech(wordList,the_language)
