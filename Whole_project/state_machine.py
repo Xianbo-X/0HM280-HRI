@@ -39,7 +39,7 @@ class Wait(StateMachine):
             self.deteced=True
         pass
     def enter(self, *args, **kwargs):
-        #TODO: face detection(while loop)
+        self.deteced=nao.DetectFace() #TODO check detect face
         return True
     def exit(self, *args, **kwargs):
         # return state
@@ -70,6 +70,7 @@ class Greeting(StateMachine):
         pass
 
     def body(self,*args,**kwargs):
+        nao.Say("Hello, welcome to this nice hotel!")
         nao.Say("Hello! Dear cusomer.")
         selection=None
         while(selection is None or selection=="NoResult"):
