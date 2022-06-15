@@ -1,5 +1,6 @@
 import nao_nocv_2_1 as nao
 import numpy as np
+DEBUG=True
 
 
 def search_landmark():
@@ -17,10 +18,13 @@ def search_landmark():
         nao.MoveHead(yaw_val = rad, pitch_val=0, isAbsolute=True)
 #         time.sleep(0.2)
         nao.InitVideo(1) # resolution 320*240
-        nao.InitLandMark()
+        if not DEBUG:
+            nao.InitLandMark()
         # detect landmark and return info
         for cnt in range(detect_cnt):
-            detected, timestamp, markerInfo=nao.DetectLandMark()
+            if DEBUG: detected=False
+            else:
+                detected, timestamp, markerInfo=nao.DetectLandMark()
             if(detected):
                 if(marker_ID != markerInfo[0][0]):
                     marker_ID = markerInfo[0][0]

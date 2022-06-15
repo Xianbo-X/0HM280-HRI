@@ -4,8 +4,9 @@ from libraries.audio import speech_recog
 from libraries.battery import detect_low_battery
 from libraries.exceptions import *
 import logging
-from landmark_detection import search_landmark
-from behavior_based_navigation_ch4 import moveToTarget
+from libraries.landmark_detection import search_landmark
+from libraries.behavior_based_navigation_ch4 import moveToTarget
+from threading import Thread
 
 DEBUG=True
 logging.basicConfig(level=logging.INFO)
@@ -77,9 +78,17 @@ class Greeting(StateMachine):
         return selection
 
     def show_selection(self):
-        nao.Say("May I offer you any service?")
-        nao.Say("Yes or No?")
-        do_posture_once("StandZero","Crouch")
+        t1=Thread(target=do_posture_once,args=("StandZero","Crouch"))
+        t2=Thread(target=nao.Say,args=("May I offer you any services?",))
+        t3=Thread(target=nao.Say,args=("Yes or No?",))
+        t1.start()
+        t2.start()
+        t3.start()
+        t2.join()
+        t3.join()
+        # do_posture_once("StandZero","Crouch")
+        # nao.Say("May I offer you any service?")
+        # nao.Say("Yes or No?")
 
     def get_selection(self):
         selection=None
@@ -284,17 +293,12 @@ class Guide(StateMachine):
         self.wordlist = ["yes", "no"]
         self.retry = 5
 
-    def navigation():
+    def navigation(self):
         nao.InitPose()
         nao.InitSonar()
 
         # find landmark
-        try:
-            find_landmark, markinfo = search_landmark(nao)
-        except Exception,e:
-            find_landmark = True
-            nao.Walk(0,0, 0.3)
-            nao.MoveHead(yaw_val = 0, pitch_val=0, isAbsolute =True)
+        find_landmark, markinfo = search_landmark()
         reach_landmark=False
         while (not reach_landmark):
             if(find_landmark):
@@ -318,56 +322,21 @@ class Guide(StateMachine):
                         [SL, SR]=nao.ReadSonar()
                     moveToTarget(nao,0.5,0)
                     # nao.Walk(0.5, 0, 0)
-                find_landmark, markinfo = search_landmark(nao)
+                find_landmark, markinfo = search_landmark()
                 if(find_landmark==False):
             #         speaker = ALProxy(IP="marvin.local", proxy=[0], PORT = 9559) # may need to changed
                     nao.Say("I cannot find landmark!")
                     print "I cannot find landmark!"
+                    raise NavigationException("Guide",8)
 
-    def navigation():
-        nao.InitPose()
-        nao.InitSonar()
-
-        # find landmark
-        try:
-            find_landmark, markinfo = search_landmark(nao)
-        except Exception,e:
-            find_landmark = True
-            nao.Walk(0,0, 0.3)
-            nao.MoveHead(yaw_val = 0, pitch_val=0, isAbsolute =True)
-        reach_landmark=False
-        while (not reach_landmark):
-            if(find_landmark):
-                #print markinfo[0][3]
-                moveToTarget(nao,5,0)
-                [SL, SR]=nao.ReadSonar()
-                if(SL < 1 and SR < 1):
-                    reach_landmark = True
-            else:
-                nao.InitSonar(True)
-                [SL, SR]=nao.ReadSonar()
-                print SL, SR
-                if(SL > 1 and SR > 1):
-                    nao.Stiffen() # turns all motors on
-                    moveToTarget(nao,0.5,0)
-                    # nao.Walk(0.5, 0, 0) # move forward to find the landmark
-                else:
-            #         nao.Walk(0,0,math.pi) # turn around
-                    while(SL<1 or SR<1):
-                        nao.Move(0,0,0.349)
-                        [SL, SR]=nao.ReadSonar()
-                    moveToTarget(nao,0.5,0)
-                    # nao.Walk(0.5, 0, 0)
-                find_landmark, markinfo = search_landmark(nao)
-                if(find_landmark==False):
-            #         speaker = ALProxy(IP="marvin.local", proxy=[0], PORT = 9559) # may need to changed
-                    nao.Say("I cannot find landmark!")
-                    print "I cannot find landmark!"
-
-    def enter(self, *args, **kwargs):
+    def enter(self, state_dict,*args, **kwargs):
         nao.Say("Please follow me!")
         # navigation to landmark
-        self.navigation()
+        skip_guide=False
+        if state_dict.get("skip_navigation") is not None:
+            skip_guide=state_dict.get("skip_navigation")
+        if not skip_guide:
+            self.navigation()
         try:
             nao.Say("Still need other service?")
             answer = speech_recog(self.wordlist)
@@ -394,7 +363,7 @@ class Guide(StateMachine):
         # return state
         return {"next":self.nextphase}
     def run(self,state_dict,**kwargs):
-        self.enter()
+        self.enter(state_dict)
         return self.exit()
 
 class Unexpected(StateMachine):

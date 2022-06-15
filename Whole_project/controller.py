@@ -1,6 +1,6 @@
 from libraries import nao_nocv_2_1 as nao
 from config import ROBOT_IP,ROBOT_PORT,SPEECH_SENSITIVITY
-from libraries.exceptions import BatteryLowException, NoResponseException,BatteryLowHandler,GeneralHandler, NoResponseHandler
+from libraries.exceptions import BatteryLowException, NavigationException, NoResponseException,BatteryLowHandler,GeneralHandler, NoResponseHandler,NavigationHandler
 import state_machine as sm
 
 class Handler():
@@ -8,6 +8,7 @@ class Handler():
         self.batterylowHandler=BatteryLowHandler()
         self.noResponseHandler=NoResponseHandler()
         self.generalHandler=GeneralHandler()
+        self.navigationHandler=NavigationHandler()
 class FiniteMachineController():
     def __init__(self,all_states):
         """"
@@ -40,7 +41,6 @@ class FiniteMachineController():
         while(True):
             try:
                 self.returned_info=self.current_state(self.returned_info)
-                print "State_machine next: ",self.returned_info["next"]
                 next=self.returned_info["next"]
                 if self.returned_info["next"]==0:
                     break
@@ -48,10 +48,19 @@ class FiniteMachineController():
                 next=self.handler.batterylowHandler()
             except NoResponseException,e:
                 next=self.handler.noResponseHandler()
+            except NavigationException,e:
+                self.handler.generalHandler()
+                next=e.next
+                print(next)
+                self.returned_info={
+                    "next":e.next,
+                    "skip_navigation":True
+                }
             except Exception,e:
                 print(e)
                 next=self.handler.generalHandler()
             finally:
+                print "State_machine next: ",next
                 self.set_current_state(self.get_next_state(next))
             
 def init_nao():

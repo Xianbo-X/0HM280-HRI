@@ -11,6 +11,11 @@ class NoResponseException(Exception):
         super(NoResponseException,self).__init__(message)
         self.message = "No response"
 
+class NavigationException(Exception):
+    def __init__(self, message,next):
+        super(NavigationException,self).__init__(message)
+        self.next=next
+        self.message = "Navigation exception"
 class BatteryLowHandler():
     def __init__(self):
         pass
@@ -26,6 +31,16 @@ class NoResponseHandler():
         nao.Say("No response from custom, Go back to StandBy Mode")
         return 1
 
+class NavigationHandler():
+    def __init__(self):
+        pass
+    
+    def __call__(cls):
+        nao.Say("Remote control on")
+        TestCommands()
+        StopRobot()
+        nao.Say("Remote control off")
+        return 1
 class GeneralHandler():
     def __init__(self):
         pass
