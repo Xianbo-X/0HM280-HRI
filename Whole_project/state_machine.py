@@ -3,6 +3,9 @@ from time import sleep
 from libraries.audio import speech_recog
 from libraries.battery import detect_low_battery
 import logging
+from landmark_detection import search_landmark
+from behavior_based_navigation_ch4 import moveToTarget
+
 DEBUG=True
 logging.basicConfig(level=logging.INFO)
 
@@ -229,10 +232,50 @@ class Guide(StateMachine):
     def __init__(self,ROBOT_IP,ROBOT_PORT,nao):
         self.nextphase = 0
 
+    def navigation():
+        nao.InitPose()
+        nao.InitSonar()
+
+        # find landmark
+        try:
+            find_landmark, markinfo = search_landmark(nao)
+        except Exception,e:
+            find_landmark = True
+            nao.Walk(0,0, 0.3)
+            nao.MoveHead(yaw_val = 0, pitch_val=0, isAbsolute =True)
+        reach_landmark=False
+        while (not reach_landmark):
+            if(find_landmark):
+                #print markinfo[0][3]
+                moveToTarget(nao,5,0)
+                [SL, SR]=nao.ReadSonar()
+                if(SL < 1 and SR < 1):
+                    reach_landmark = True
+            else:
+                nao.InitSonar(True)
+                [SL, SR]=nao.ReadSonar()
+                print SL, SR
+                if(SL > 1 and SR > 1):
+                    nao.Stiffen() # turns all motors on
+                    moveToTarget(nao,0.5,0)
+                    # nao.Walk(0.5, 0, 0) # move forward to find the landmark
+                else:
+            #         nao.Walk(0,0,math.pi) # turn around
+                    while(SL<1 or SR<1):
+                        nao.Move(0,0,0.349)
+                        [SL, SR]=nao.ReadSonar()
+                    moveToTarget(nao,0.5,0)
+                    # nao.Walk(0.5, 0, 0)
+                find_landmark, markinfo = search_landmark(nao)
+                if(find_landmark==False):
+            #         speaker = ALProxy(IP="marvin.local", proxy=[0], PORT = 9559) # may need to changed
+                    nao.Say("I cannot find landmark!")
+                    print "I cannot find landmark!"
+
     def enter(self, *args, **kwargs):
         nao.Say("Please follow me!")
         # navigation to landmark
-
+        self.navigation()
         try:
             nao.Say("Still need other service?")
             answer = speech_recog(self.wordlist)
