@@ -1274,6 +1274,7 @@ def InitSpeech(wordList=["yes","no","hello NAO","goodbye NAO"],the_language="Eng
     #asr=speechProxy
     
     #Before starting the ASR engine, you must set the language of the speech recognition system. The list of the installed languages can be obtained through the getAvailableLanguages method.
+    asr.pause(True)
     asr.setLanguage(the_language)
 
     #Note that this does not affect the language of speech synthesis. 
