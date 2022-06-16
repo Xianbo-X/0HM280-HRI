@@ -38,16 +38,17 @@ class Wait(StateMachine):
     def __init__(self,ROBOT_IP,ROBOT_PORT,nao):
         self.deteced=False
         self.event=Event()
-        self.dialog=Thread(target=start_dialog_on_multitopics,args=(self.event,config.DIALOG_TOPICS,config.SPEECH_SENSITIVITY))
     def enter(self, *args, **kwargs):
         # nao.Say("I am waiting for people!")
-        self.dialog.start()
+        self.event.clear()
+        # t=Thread(target=start_dialog_on_multitopics,args=(self.event,config.DIALOG_TOPICS,config.SPEECH_SENSITIVITY))
+        # t.start()
+        start_dialog_on_multitopics(self.event,config.DIALOG_TOPICS,config.SPEECH_SENSITIVITY)
         self.deteced=nao.FindFace() #TODO check detect face
         print(self.deteced)
     def exit(self, *args, **kwargs):
         # return state
         self.event.set()
-        self.dialog.join()
         if self.deteced:
             return {"next":2}
         else:
@@ -75,7 +76,7 @@ class Greeting(StateMachine):
         pass
 
     def body(self,*args,**kwargs):
-        nao.Say("Hello, welcome to this nice hotel! I am your guide. I will be your guide for the rest of your stay.")
+        # nao.Say("Hello, welcome to this nice hotel! I am your guide. I will be your guide for the rest of your stay.")
         nao.Say("Dear customer.")
         selection=None
         while(selection is None or selection=="NoResult"):

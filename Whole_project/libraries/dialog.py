@@ -1,9 +1,12 @@
 import nao_nocv_2_1 as nao
-
+import os
+from naoqi import ALProxy
+robot_ip="192.168.0.112"
+robot_port=9559
 def start_dialog_on_multitopics(event,topf_path, threshold=0.4):
-    # dialog_p = ALProxy('ALDialog', robot_ip, robot_port)
+    dialog_p = ALProxy('ALDialog', robot_ip, robot_port)
     print("thread start")
-    dialog_p = nao.dialogProxy
+    
     dialog_p.setLanguage("English")
     dialog_p.setASRConfidenceThreshold(threshold)
 
@@ -23,9 +26,9 @@ def start_dialog_on_multitopics(event,topf_path, threshold=0.4):
             dialog_p.activateTopic(topic[i]) # activate all topics
         
         # dialog_p.setFocus()
-        event.wait()
+        # event.wait()
         print("Thread exit")
-        # raw_input(u"Press 'Enter' to exit.")
+        raw_input(u"Press 'Enter' to exit.")
     except Exception,e:
         print "Exception happened:",e
     finally:

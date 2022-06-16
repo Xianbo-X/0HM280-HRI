@@ -6,4 +6,10 @@ DIALOG_TOPICS=[]
 DIALOG_TOPICS.append("/home/nao/group_08/Topics/checkin_enu.top")  # Absolute path of the dialog topic file (on the robot).
 DIALOG_TOPICS.append("/home/nao/group_08/Topics/food_enu.top")
 DIALOG_TOPICS.append("/home/nao/group_08/Topics/general_enu.top")
-DIALOG_TOPICS.append("/home/nao/group_08/Topics/test_enu.top")
+DIALOG_TOPICS.append("/home/nao/group_08/Topics/bye_enu.top")
+DIALOG_TOPICS.append("/home/nao/group_08/Topics/weather_enu.top")
+
+# DIALOG_TOPICS.append("./Topics/checkin_enu.top")  # Absolute path of the dialog topic file (on the robot).
+# DIALOG_TOPICS.append("./Topics/food_enu.top")
+# DIALOG_TOPICS.append("./Topics/general_enu.top")
+# DIALOG_TOPICS.append("./Topics/test_enu.top")
