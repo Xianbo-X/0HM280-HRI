@@ -1,3 +1,4 @@
+from multiprocessing import Event
 import libraries.nao_nocv_2_1 as nao
 from time import sleep
 from libraries.audio import speech_recog
@@ -7,7 +8,8 @@ import logging
 from libraries.landmark_detection import search_landmark, navigation
 from libraries.behavior_based_navigation_ch4 import moveToTarget
 from threading import Thread
-
+from libraries.dialog import start_dialog_on_multitopics
+import config
 DEBUG=True
 logging.basicConfig(level=logging.INFO)
 
@@ -35,12 +37,16 @@ class Blank(StateMachine):
 class Wait(StateMachine):
     def __init__(self,ROBOT_IP,ROBOT_PORT,nao):
         self.deteced=False
+        self.event=Event()
+        self.dialog=Thread(target=start_dialog_on_multitopics,args=(self.event,config.ROBOT_IP,config.DIALOG_TOPICS))
     def enter(self, *args, **kwargs):
         # nao.Say("I am waiting for people!")
+        self.dialog.start()
         self.deteced=nao.FindFace() #TODO check detect face
         print(self.deteced)
     def exit(self, *args, **kwargs):
         # return state
+        self.event.set()
         if self.deteced:
             return {"next":2}
         else:
