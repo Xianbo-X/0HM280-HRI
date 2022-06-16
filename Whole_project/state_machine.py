@@ -38,7 +38,7 @@ class Wait(StateMachine):
     def __init__(self,ROBOT_IP,ROBOT_PORT,nao):
         self.deteced=False
         self.event=Event()
-        self.dialog=Thread(target=start_dialog_on_multitopics,args=(self.event,config.ROBOT_IP,config.DIALOG_TOPICS))
+        self.dialog=Thread(target=start_dialog_on_multitopics,args=(self.event,config.DIALOG_TOPICS,config.SPEECH_SENSITIVITY))
     def enter(self, *args, **kwargs):
         # nao.Say("I am waiting for people!")
         self.dialog.start()
@@ -47,6 +47,7 @@ class Wait(StateMachine):
     def exit(self, *args, **kwargs):
         # return state
         self.event.set()
+        self.dialog.join()
         if self.deteced:
             return {"next":2}
         else:
