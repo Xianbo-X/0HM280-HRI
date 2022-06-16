@@ -1,5 +1,6 @@
 import nao_nocv_2_1 as nao
 import numpy as np
+from libraries.exceptions import *
 DEBUG=False
 
 from behavior_based_navigation_ch4 import moveToTarget
@@ -60,12 +61,9 @@ def navigation():
         nao.Walk(0,0, math.pi/2)
         turn_back = - math.pi/2
         # find landmark
-        try:
-            find_landmark, turn_ang = search_landmark(nao)
-        except Exception,e:
-            find_landmark = True
-            nao.Walk(0,0, 0.3)
-            nao.MoveHead(yaw_val = 0, pitch_val=0, isAbsolute =True)
+        
+        find_landmark, turn_ang = search_landmark(nao)
+        
         turn_back -= turn_ang
         reach_landmark=False
         while (not reach_landmark):
@@ -96,5 +94,7 @@ def navigation():
             #         speaker = ALProxy(IP="marvin.local", proxy=[0], PORT = 9559) # may need to changed
                     nao.Say("I cannot find landmark!")
                     print "I cannot find landmark!"
+                    raise NavigationException("Guide",8)
         # face to customer again
         nao.Walk(0,0,turn_back)
+        
