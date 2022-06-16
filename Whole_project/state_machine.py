@@ -62,6 +62,7 @@ class Greeting(StateMachine):
     def __init__(self, ROBOT_IP, ROBOT_PORT, nao):
         self.ROBOT_IP=ROBOT_IP
         self.ROBOT_PORT=ROBOT_PORT
+        self.retry=5
 
     def enter(self):
         logging.debug("State_2(GreetingMode): enter")
@@ -71,9 +72,13 @@ class Greeting(StateMachine):
         nao.Say("Hello, welcome to this nice hotel! I am your guide. I will be your guide for the rest of your stay.")
         nao.Say("Dear customer.")
         selection=None
+        count=0
         while(selection is None or selection=="NoResult"):
+            count+=1
+            if count==self.retry: break
             self.show_selection()
             selection=self.get_selection()
+            print(selection)
         return selection
 
     def show_selection(self):
