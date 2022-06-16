@@ -214,6 +214,7 @@ def InitProxy(IP="marvin.local", proxy=[0], PORT = 9559):
     soundProxy=proxyDict["ALSoundDetection"]
     soundLocalizationProxy=proxyDict["ALAudioSourceLocalization"]
     trackerProxy=proxyDict["ALTracker"]
+    dialogProxy=proxyDict["ALDialog"]
 
 def InitSonar(flag=True):
     
