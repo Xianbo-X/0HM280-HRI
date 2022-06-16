@@ -1,0 +1,7 @@
+topic: ~bye()
+language: enu
+
+u:(["can I see you again?"])I will always be there.
+
+recover:
+u:([bye "bye bye" "have a nice day"])bye bye $kisses=1

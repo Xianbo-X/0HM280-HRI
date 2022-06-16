@@ -1,0 +1,12 @@
+topic: ~weather()
+language: enu
+
+concept:(weather)[weather temperature]
+concept:(sun) ^rand[sunny hot warm "a high temperature"]
+concept:(rain) ^rand[rainy wet cold "not a good weather"]
+ 
+u: (~weather) I'll check the weather for you.
+u:^private(it's so _* outside) Yes, it’s too $1 today
+u:^private(~sun today) Yes, it’s ~sun today
+u:^private(~rain today) Yes, it’s ~rain today
+

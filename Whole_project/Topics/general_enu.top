@@ -1,0 +1,46 @@
+topic: ~general()
+language: enu
+
+concept:(ask_fav)["your favorite" "you like the most"]
+concept:(fav_book)["it’s Sapiens:A brief history of humankind, which is a really nice book to understand humans. Have you read this book before?"]
+concept:(fav_food)["I don’t need to eat, but I do like chargers, is it a kind of food?"]
+concept:(fav_drink)["I don’t like any kind of liquid, they will hurt me. How about you?"]
+concept:(fav_sport)["I like watching football games, but sadly, I have no feet. Do you play football?"]
+concept:(fav_movie)["Sorry, I've never been invited to the cinema yet."]
+concept:(grateful) ^rand[thanks "thank you"]
+concept:(age)["how old are you" "what is your age"]
+
+u:(~ask_fav book)~fav_book
+ u1:(Yes)Oh, then do you like it too? $curious=1
+  u2:(Yes)So glad to hear that! $happy=1
+  u2:(No)What a pity! $bored=1
+ u1:(No)Then I highly recommend it, it’s really a fancy book.
+
+u:(~ask_fav food)~fav_food
+ u1:(No) Okay, then I never have tasted any food yet, so sad.
+ u1:(!No) Really? Unbelievable!
+
+u:(~ask_fav drink)~fav_drink
+ u1:([alcohol wine beer liquor champagne]) Oh, excessive drinking is harmful to health, I can tell from the disinfectant alcohol in the air.
+ u1:([milk chocolate tea coffee soda juice]) Sounds good! Hope I can have a try one day.
+
+u:(~ask_fav sport)~fav_sport
+ u1:(Yes) Awesome! Then you must have great leg muscles.
+ u1:(No) What kind of sports do you like?
+  u2:( play _*) Oh, I know $1, cool!
+
+u:(~ask_fav movie)~fav_movie
+
+u:(~ask_fav food)~fav_food
+ u1:(No) Okay, then I never have tasted any food yet, so sad.
+ u1:(!No) Really? Unbelievable!
+ 
+u:(~grateful) ^rand["You are welcome" "It is my pleasure"]
+u:(~age) I am 7 years old.
+u:(what is your name?) My name is Pepper, what is your name?
+u:(my name is _*) nice to meet you $1.
+
+
+
+
+

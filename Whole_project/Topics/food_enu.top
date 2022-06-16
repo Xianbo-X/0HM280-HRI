@@ -1,0 +1,9 @@
+topic: ~food()
+language: enu
+
+concept:(food)[food dessert dinner lunch breakfast brunch "afternoon tea"]
+concept:(drink) [drink wine beer "white wine" liquor champagne milk juice tea coffee]
+
+u:(~food) If you would like to have something to eat, you can go to the hotel restaurant, it’s on the second floor.
+u:(~drink) If you would like to have something to drink, you can go to the hotel bar, it’s on the ground floor. 
+

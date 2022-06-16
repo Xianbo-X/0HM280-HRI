@@ -1,0 +1,26 @@
+topic: ~checkin()
+language: enu
+
+# Defining extra concepts out of words or group of words
+concept:(greetings) ^rand[hi hello "hey there"] $lookat=1
+concept:(Yes) [sure ok okay yeap yes please]
+concept:(No) [no nope "that's it"]
+# robot response
+
+concept:(wish) ["Thank you! Enjoy your day"]
+concept:(checkin) ["Please give me your personal ID, and when you done please say done to me."]
+concept:(checkout) ["Thanks for choosing our hotel! Have a nice day"]
+
+# Replying to speech
+u:(~greetings) ~greetings May I offer you any service?
+    u1:(~Yes) Which service would you like to choose? Check in, Check out, or other service.$shake=1
+        u2:(check in) ~checkin
+            u3:(done) Please wait...Thank you! Your room number is 808, do you need me to show you the way to the elevator? # add more behavior
+                 u4:(~Yes) Okay, just follow me, I will guide you.
+                 u4:(~No) ~wish
+
+    u1:(~No) ~wish
+
+u:(check in) ~checkin        
+u:(check out) ~checkout $done=1
+
