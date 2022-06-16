@@ -35,13 +35,10 @@ class Blank(StateMachine):
 class Wait(StateMachine):
     def __init__(self,ROBOT_IP,ROBOT_PORT,nao):
         self.deteced=False
-        if DEBUG:
-            self.deteced=True
-        pass
     def enter(self, *args, **kwargs):
-        if not DEBUG:
-            self.deteced=nao.DetectFace() #TODO check detect face
-        return True
+        # nao.Say("I am waiting for people!")
+        self.deteced=nao.FindFace() #TODO check detect face
+        print(self.deteced)
     def exit(self, *args, **kwargs):
         # return state
         if self.deteced:
@@ -72,7 +69,7 @@ class Greeting(StateMachine):
 
     def body(self,*args,**kwargs):
         nao.Say("Hello, welcome to this nice hotel! I am your guide. I will be your guide for the rest of your stay.")
-        nao.Say("Dear costumer.")
+        nao.Say("Dear customer.")
         selection=None
         while(selection is None or selection=="NoResult"):
             self.show_selection()
@@ -247,8 +244,8 @@ class OtherService(StateMachine):
             raise(e)
 
     def enter(self, *args, **kwargs):
-        nao.Say("Dear customer, I can guide you to the elevator, set the alarm for tommorow, call a taxi, \
-                reverve an available front desk, offer hotel info, share nearby attraction place")
+        nao.Say("Dear customer, I can guide you to the elevator, set an alarm for tommorow, call a taxi, \
+                reserve an available front desk, offer hotel info, share nearby attraction place")
         answer = speech_recog(self.wordlist)
 
         if answer == "No":
@@ -281,6 +278,10 @@ class OtherService(StateMachine):
             nao.Say("We have GYM at 5th floor, Swimming pool on the roof.")
             self.ask_more_service()
             return
+        
+        nao.Say("Sorry, I didn't hear anything, could you repeat your selection again?")
+        self.nextphase=6
+        return
             
     def exit(self, *args, **kwargs):
         # return state
