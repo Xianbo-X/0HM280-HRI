@@ -2,6 +2,7 @@ from libraries import nao_nocv_2_1 as nao
 from config import ROBOT_IP,ROBOT_PORT,SPEECH_SENSITIVITY
 from libraries.exceptions import BatteryLowException, NavigationException, NoResponseException,BatteryLowHandler,GeneralHandler, NoResponseHandler,NavigationHandler
 import state_machine as sm
+from time import sleep
 
 class Handler():
     def __init__(self):
@@ -59,13 +60,16 @@ class FiniteMachineController():
             except Exception,e:
                 print(e)
                 next=self.handler.generalHandler()
-                raise e
+                # raise e
             finally:
                 print "State_machine next: ",next
                 self.set_current_state(self.get_next_state(next))
+                # sleep(0.5)
             
 def init_nao():
     nao.InitProxy(ROBOT_IP,PORT=ROBOT_PORT)
+    # nao.ALTrack(False)
+    # nao.EndTrack()
     nao.InitPose()
 
 def init_controller():

@@ -16,6 +16,7 @@ def search_landmark():
     head_mov_range = np.linspace(-1.086017,1.086017,10)
     # detect landmark times
     detect_cnt = 100
+    marker_ID=0
     for rad in head_mov_range:
         nao.InitTrack()
         nao.MoveHead(yaw_val = rad, pitch_val=0, isAbsolute=True)
@@ -62,7 +63,7 @@ def navigation():
         turn_back = - math.pi/2
         # find landmark
         
-        find_landmark, turn_ang = search_landmark(nao)
+        find_landmark, turn_ang = search_landmark()
         
         turn_back -= turn_ang
         reach_landmark=False
@@ -89,7 +90,7 @@ def navigation():
                         [SL, SR]=nao.ReadSonar()
                     moveToTarget(nao,0.5,0)
                     # nao.Walk(0.5, 0, 0)
-                find_landmark, markinfo = search_landmark(nao)
+                find_landmark, markinfo = search_landmark()
                 if(find_landmark==False):
             #         speaker = ALProxy(IP="marvin.local", proxy=[0], PORT = 9559) # may need to changed
                     nao.Say("I cannot find landmark!")
