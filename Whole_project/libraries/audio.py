@@ -1,6 +1,6 @@
 import nao_nocv_2_1 as nao
 import time
-DEBUG=True
+DEBUG=False
 
 def speech_recog(wordList,maxcount=50,subscriber_name="MyModule"):
     if DEBUG:

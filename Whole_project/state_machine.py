@@ -39,7 +39,8 @@ class Wait(StateMachine):
             self.deteced=True
         pass
     def enter(self, *args, **kwargs):
-        self.deteced=nao.DetectFace() #TODO check detect face
+        if not DEBUG:
+            self.deteced=nao.DetectFace() #TODO check detect face
         return True
     def exit(self, *args, **kwargs):
         # return state
@@ -70,8 +71,8 @@ class Greeting(StateMachine):
         pass
 
     def body(self,*args,**kwargs):
-        nao.Say("Hello, welcome to this nice hotel!")
-        nao.Say("Hello! Dear cusomer.")
+        nao.Say("Hello, welcome to this nice hotel! I am your guide. I will be your guide for the rest of your stay.")
+        nao.Say("Dear costumer.")
         selection=None
         while(selection is None or selection=="NoResult"):
             self.show_selection()
@@ -79,13 +80,13 @@ class Greeting(StateMachine):
         return selection
 
     def show_selection(self):
-        t1=Thread(target=do_posture_once,args=("StandZero","Crouch"))
+        # t1=Thread(target=do_posture_once,args=("StandZero","Crouch"))
         t2=Thread(target=nao.Say,args=("May I offer you any services?",))
         t3=Thread(target=nao.Say,args=("Yes or No?",))
-        t1.start()
+        # t1.start()
         t2.start()
-        t3.start()
         t2.join()
+        t3.start()
         t3.join()
         # do_posture_once("StandZero","Crouch")
         # nao.Say("May I offer you any service?")
@@ -219,7 +220,7 @@ class CheckOut(StateMachine):
 class OtherService(StateMachine):
     def __init__(self,ROBOT_IP,ROBOT_PORT,nao):
         self.nextphase = 0
-        self.wordlist = ["Gudie", "Alarm", "Taxi", "Reserve", "Nearby", "Info", "No", "Again"]
+        self.wordlist = ["Guide", "Alarm", "Taxi", "Reserve", "Nearby", "Info", "No", "Again"]
         self.retry = 5
         
     def ask_more_service(self):
@@ -283,6 +284,7 @@ class OtherService(StateMachine):
             
     def exit(self, *args, **kwargs):
         # return state
+        print(self.nextphase)
         return {"next":self.nextphase}
     def run(self,state_dict,**kwargs):
         self.enter()

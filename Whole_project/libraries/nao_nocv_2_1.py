@@ -666,6 +666,7 @@ def version(string):
 #############################################################################
 def InitPose(time_pos=0.5, speed=0.8):
     """Nao will move to initpose."""
+    
 
     Move(0.0,0.0,0.0) # stop moving
     sleep(0.1)

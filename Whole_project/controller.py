@@ -59,12 +59,14 @@ class FiniteMachineController():
             except Exception,e:
                 print(e)
                 next=self.handler.generalHandler()
+                raise e
             finally:
                 print "State_machine next: ",next
                 self.set_current_state(self.get_next_state(next))
             
 def init_nao():
     nao.InitProxy(ROBOT_IP,PORT=ROBOT_PORT)
+    nao.InitPose()
 
 def init_controller():
     all_state_machine=[state_machine(ROBOT_IP,ROBOT_PORT,nao) for state_machine in sm.__all__]

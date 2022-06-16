@@ -1,6 +1,6 @@
 import nao_nocv_2_1 as nao
 import numpy as np
-DEBUG=True
+DEBUG=False
 
 from behavior_based_navigation_ch4 import moveToTarget
 import math
