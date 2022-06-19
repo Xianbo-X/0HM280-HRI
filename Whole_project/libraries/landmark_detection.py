@@ -105,7 +105,7 @@ def navigation():
                         nao.Move(0,0,0.349)
                         [SL, SR]=nao.ReadSonar()
                     # moveToTarget(nao,0.5,0)
-                find,markinfo=action_no_landmark()
+                find_landmark,markinfo=action_no_landmark()
                     # nao.Walk(0.5, 0, 0)
                 # find_landmark, markinfo = search_landmark() 
                 if(find_landmark==False):
