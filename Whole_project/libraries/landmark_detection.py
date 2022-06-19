@@ -7,14 +7,14 @@ DEBUG=False
 from behavior_based_navigation_ch4 import moveToTarget
 import math
 
-def search_landmark():
+def search_landmark(nums=5):
     """
     Return
     -----
     [Detect result, landmark angle(Yaw)]
     """
     # head move range -119.5 ~ 119.5 deg
-    head_mov_range = np.linspace(-1.086017,1.086017,10)
+    head_mov_range = np.linspace(-1.086017,1.086017,nums)
     # detect landmark times
     detect_cnt = 100
     marker_ID=0
