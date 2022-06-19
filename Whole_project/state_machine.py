@@ -239,7 +239,8 @@ class OtherService(StateMachine):
                 if cnt==self.retry:
                     raise NoResponseException("other service")
             if answer == "yes":
-                self.nextphase = 6
+                # self.nextphase = 6
+                self.nextphase = 3
                 return
             elif answer == "no":
                 self.nextphase = 1
