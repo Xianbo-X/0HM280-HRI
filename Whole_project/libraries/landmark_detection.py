@@ -1,6 +1,7 @@
 import nao_nocv_2_1 as nao
 import numpy as np
 from libraries.exceptions import *
+from threading import Thread,Event
 DEBUG=False
 
 from behavior_based_navigation_ch4 import moveToTarget
@@ -46,14 +47,30 @@ def search_landmark():
                         nao.MoveHead(yaw_val = 0, pitch_val=0, isAbsolute =True)
                         return detected, markerInfo[0][1]+rad
     nao.MoveHead(yaw_val = 0, pitch_val=0, isAbsolute =True)
-    return False, None
+    return False, 0
 
 def reach2target():
-    _, markinfo=search_landmark(nao)
+    _, markinfo=search_landmark()
     #markerinfo[0][3] #sizeX
     if(markinfo[0][3]>100):
         return True
     else: return False
+
+def action_no_landmark():
+    print("Look around")
+    nao.InitSonar()
+    find,markInfo=search_landmark()
+    max_retry=5
+    total_retry=0
+    while (not find and total_retry<max_retry):
+        print "\r Retry:"+str(total_retry)
+        total_retry+=1
+        for i in range(4):
+            moveToTarget(nao,5,0) # Move around
+            nao.motionProxy.waitUntilMoveIsFinished() # Wait motion finish to avoid send instruction too fast.
+        find,markInfo=search_landmark()
+        nao.Walk(0,0,0)
+    return find,markInfo
 
 def navigation():
         nao.InitPose()
@@ -81,16 +98,16 @@ def navigation():
                 print SL, SR
                 if(SL > 1 and SR > 1):
                     nao.Stiffen() # turns all motors on
-                    moveToTarget(nao,0.5,0)
-                    # nao.Walk(0.5, 0, 0) # move forward to find the landmark
+                    # moveToTarget(nao,0.5,0) # move forward to find the landmark
                 else:
             #         nao.Walk(0,0,math.pi) # turn around
                     while(SL<1 or SR<1):
                         nao.Move(0,0,0.349)
                         [SL, SR]=nao.ReadSonar()
-                    moveToTarget(nao,0.5,0)
+                    # moveToTarget(nao,0.5,0)
+                find,markinfo=action_no_landmark()
                     # nao.Walk(0.5, 0, 0)
-                find_landmark, markinfo = search_landmark()
+                # find_landmark, markinfo = search_landmark() 
                 if(find_landmark==False):
             #         speaker = ALProxy(IP="marvin.local", proxy=[0], PORT = 9559) # may need to changed
                     nao.Say("I cannot find landmark!")
