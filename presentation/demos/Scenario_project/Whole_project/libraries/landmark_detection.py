@@ -112,7 +112,7 @@ def navigation():
             #         speaker = ALProxy(IP="marvin.local", proxy=[0], PORT = 9559) # may need to changed
                     nao.Say("I cannot find landmark!")
                     print "I cannot find landmark!"
-                    raise NavigationException("Guide",8)
+                    raise NavigationException("Guide",7)
         # face to customer again
         nao.Walk(0,0,turn_back)
         
