@@ -8,7 +8,7 @@ from libraries.landmark_detection import search_landmark, navigation
 from libraries.behavior_based_navigation_ch4 import moveToTarget
 from threading import Thread
 
-DEBUG=True
+DEBUG=False
 logging.basicConfig(level=logging.INFO)
 
 
@@ -37,7 +37,10 @@ class Wait(StateMachine):
         self.deteced=False
     def enter(self, *args, **kwargs):
         # nao.Say("I am waiting for people!")
-        self.deteced=nao.FindFace() #TODO check detect face
+        if DEBUG:
+            self.deteced=True if raw_input("Find face?(Y/N)").upper()=="Y" else False
+        else:
+            self.deteced=nao.FindFace() #TODO check detect face
         print(self.deteced)
     def exit(self, *args, **kwargs):
         # return state
