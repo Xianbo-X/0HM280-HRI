@@ -62,17 +62,24 @@ def compute_turnrate(target_dist, target_angle, sonar_distance_left, sonar_dista
     # Weighted left force and right force based on the corresponding obstacle distance. It can help our robot avoid obstacles.
     print("Fobs_left",Fobs_left)
     print("Fobs_right",Fobs_right)
+    THRESHOLD=0.1
+    MAX_SONAR_DISTANCE=10
+    if (abs(sonar_distance_left-sonar_distance_right)<THRESHOLD and sonar_distance_left<MAX_SONAR_DISTANCE): # Within THRESHOLD, we see the two distances are the same
+        # print("True")
+        Fobs_left=Fobs_left*1.5 # Deal with cases that the obstablce is exactly in fornt of the robot. To make robot turn left in this case.
 
     print("Fobs_left2",Fobs_left)
     print("Fobs_right2",Fobs_right)
     FTotal = 0.5*FTarget(target_dist, target_angle) + \
-             1.01*Fobs_left + \
+             Fobs_left + \
              Fobs_right + \
              FOrienting(target_dist,target_angle) + \
              FStochastic()
              
     # turnrate: d phi(t) / dt = sum( forces ) 
-    turnrate =  FTotal*delta_t
+    # turnrate =  FTotal*delta_t 
+    if target_dist > 12: turnrate =  FTotal*delta_t 
+    else: turnrate =  FTotal*0.1
     
     #normalise turnrate value
     if turnrate>max_turnrate:
